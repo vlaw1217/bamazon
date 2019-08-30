@@ -3,6 +3,8 @@ require("dotenv").config();
 
 const mysql = require("mysql");
 
+let inquirer = require("inquirer");
+
 const connection = 
 exports.connection = mysql.createConnection({
     host: "localhost",
@@ -19,7 +21,8 @@ exports.connection = mysql.createConnection({
 connection.connect(function (err) {
     if (err) throw err;
 
-    console.log("connected as id" + connection.threadID); afterConnection();
+    console.log("Connected as id" + connection.threadID);
+    afterConnection();
 
 });
 
@@ -28,5 +31,36 @@ function afterConnection() {
         if (err) throw err;
         console.log(res);
         connection.end();
+        
+        //userQuestion()
+        //Prompt Questions for users//
+        let userQuestion = function () {
+            inquirer.prompt([
+                {
+                    type: "number",
+                    message: "Please input the product's ID.",
+                    name: "ID number"
+                    //ID: "number"
+                },
+                {
+                    type: "number",
+                    message: "How many unit?",
+                    name: "number"
+                    //unit: "number"
+                }
+            ])
+            
+                .then(function (inquirerResponse) {
+                    if (inquirerResponse.number) {
+                    
+                        console.log("Thank you!")
+                    }
+                    else {
+                        console.log("Error! Please input the product ID.")
+                    };
+        
+                });
+        };
+        userQuestion()
     });
-}
+};
