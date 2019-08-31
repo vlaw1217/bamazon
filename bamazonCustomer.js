@@ -24,7 +24,7 @@ connection.connect(function (err) {
     afterConnection();
 
 });
-// Show all the table products//
+// Show all products//
 function afterConnection() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
@@ -49,13 +49,29 @@ function afterConnection() {
         ])
             .then(function (inquirerRes) {
                 if (inquirerRes.ID <= 10) {
-                    connection.query("SELECT ID, Stock_Quantity FROM products where ID =" + inquirerRes.ID, function (err, res) {
+                    //Show the item after user input id//
+                    connection.query("SELECT * FROM products where ID =" + inquirerRes.ID, function (err, res) {
                         if (err) throw err;
-                        //console.log(res);
+                        console.log(res);
                         //console.log(res[0].Stock_Quantity)
                         let data = res[0].Stock_Quantity;
                         if (inquirerRes.number > data) {
                             console.log("Sorry! This item is out of stock!")
+                        } else {               
+                            //update quantity to be updated
+                            let stockQuantity = data - inquirerRes.number
+                            //set the update query
+                            let updateQuantity = "UPDATE products SET Stock_Quantity = " + stockQuantity + " WHERE ID = " + inquirerRes.ID;
+                                console.log(updateQuantity)
+                                //start update product
+                                    connection.query(updateQuantity,
+                                        function (err) {
+                                            if (err) throw err;
+                                            console.log("Product updated");
+                                            }
+                                        );
+                                 //end update product
+                            
                         }
                         connection.end();
                     })
@@ -72,6 +88,13 @@ function afterConnection() {
 
             });
     };
+
+    /*let confirmPayment = function () {
+        if (quantity === ture) {
+            
+        }
+    
+}*/
 
 
 };
