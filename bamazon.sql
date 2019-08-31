@@ -49,6 +49,6 @@ INSERT INTO products (Name_of_Product, Department_Name, Price, Stock_Quantity)
 VALUE ('Eyelash Curlers', 'Oakville', 20, 50);
 
 INSERT INTO products (Name_of_Product, Department_Name, Price, Stock_Quantity)
-VALUE ('Makeup Remover', 'Mississauga', 36, 123);
+VALUE ('Makeup Remover', 'Mississauga', 36, 0);
 
 

@@ -25,42 +25,72 @@ connection.connect(function (err) {
     afterConnection();
 
 });
-
+// Show all the table products//
 function afterConnection() {
-    connection.query("SELECT * FROM products", function (err, res) {
+    
+   connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.log(res);
-        connection.end();
-        
-        //userQuestion()
-        //Prompt Questions for users//
+       userQuestion();
+    })
+    
+        // Prompt Questions for users //
         let userQuestion = function () {
             inquirer.prompt([
                 {
-                    type: "number",
+                    type: "input",
                     message: "Please input the product's ID.",
-                    name: "ID number"
-                    //ID: "number"
+                    name: "ID"
                 },
+               
                 {
-                    type: "number",
+                    type: "input",
                     message: "How many unit?",
                     name: "number"
-                    //unit: "number"
-                }
+                },
             ])
-            
-                .then(function (inquirerResponse) {
-                    if (inquirerResponse.number) {
+                .then(function (inquirerRes) {
+                    if (inquirerRes.ID <= 10) {
+                        connection.query("SELECT * FROM products where id =" + inquirerRes.ID, function (err, res) {
+                            if (err) throw err;
+                            console.log(res);
+                            connection.end();
+                        })
+                        console.log("Thank you!");
+                     }
                     
-                        console.log("Thank you!")
+                    else if (inquirerRes.ID > 10) {
+                        console.log("Sorry! No this product ID number!")
+                        userQuestion();
                     }
-                    else {
-                        console.log("Error! Please input the product ID.")
-                    };
-        
-                });
-        };
-        userQuestion()
-    });
+                    else  {
+                        console.log("Error! Please input the product ID.")    
+                        userQuestion();
+                        }
+                       
+                    });
+            };
+                    
+                
 };
+
+        // Check stock quantity //
+let checkStock = function (inquirerRes) {
+    connection.query("SELECT * FROM products where Stock_Quantity", function (err, res) {
+        if (res) {
+            Stock_Quantity <= 0
+            inquirerRes()
+            console.log("Sorry! This item is out of stock!")
+        if (err) throw err;
+        //console.log(res);
+        connection.end();
+                    
+        };
+                
+        checkStock() 
+    });
+    
+};
+        
+    
+
