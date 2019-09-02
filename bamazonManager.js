@@ -30,20 +30,25 @@ function afterConnection() {
                 type: "list",
                 message: "Please choose one.",
                 name: "managerChoice",
-                choices: ['View Product for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Prodect']
+                choices: ['View Products for Sale', 'View Low Inventory', 'Add to Inventory', 'Add New Prodect']
             },
         ])
 
             .then(function (choice) {
-                let sale = 'View Product for Sale'
-                console.log(sale)
-                if (choice.managerChoice === sale) {
-               
+                let sale = 'View Products for Sale';
+                let inventory = 'View Low Inventory';    
+                if (choice.managerChoice === sale) {            
                     connection.query("SELECT * FROM products", function (err, res) {
                         if (err) throw err;
                         console.log(res);
                     });
-                };
+                } else if (choice.managerChoice === inventory) {
+                 connection.query("SELECT ID, Name_of_Product, Department_Name, Stock_Quantity FROM products where Stock_Quantity < 5", function (err, res) {
+                        if (err) throw err;
+                        console.log(res);
+                    });
+                }
+                
               
                 connection.end();
             });
