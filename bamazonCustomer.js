@@ -31,7 +31,7 @@ function afterConnection() {
         console.log(res);
         console.log("------------------------------------------------------")
         userQuestion();
-    })
+    });
 
     // Prompt Questions for users //
     let userQuestion = function () {
