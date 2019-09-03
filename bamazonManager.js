@@ -30,7 +30,7 @@ function afterConnection() {
             type: "list",
             message: "Please choose one.",
             name: "managerChoice",
-            choices: ['View Products for Sale', 'View Low Inventory', 'Update Information', 'Add New Product']
+            choices: ['View Products for Sale', 'View Low Inventory', 'Update Information', 'Add New Product', 'Exit']
         },
     ])
 
@@ -38,6 +38,8 @@ function afterConnection() {
             let sale = 'View Products for Sale';
             let inventory = 'View Low Inventory';
             let updateInfo = 'Update Information';
+            let addProduct = 'Add New Product';
+            let exit = 'Exit';
             if (choice.managerChoice === sale) {
                 connection.query("SELECT * FROM products", function (err, res) {
                     if (err) throw err;
@@ -57,8 +59,15 @@ function afterConnection() {
                 showAllProuduct();
                 //updateProductFunc();
 
+            } else if (choice.managerChoice === addProduct) {
+                showAllProuduct();
+            
+
+            } else {
+                choice.managerChoice === exit
+                process.exit();
             }
-        })
+        });
 
     /* start showAllProudct function */
     function showAllProuduct() {
@@ -78,7 +87,7 @@ function afterConnection() {
                 type: "list",
                 message: "Update which one?",
                 name: "add",
-                choices: ['Update Name of Product', 'Update Department', 'Update Price', 'Update Stock Quantity'],
+                choices: ['Update Name of Product', 'Update Department', 'Update Price', 'Update Stock Quantity', 'Exit'],
             },
         ])
             .then(function (update) {
@@ -101,7 +110,7 @@ function afterConnection() {
                                     console.log(res)
                                     newName()
                                 })
-                                let newName = function newName() {
+                                let newName = function () {
                                     inquirer.prompt([
                                         {
                                             type: "input",
@@ -114,8 +123,8 @@ function afterConnection() {
                                                 function (err, res) {
                                                     if (err) throw err;
                                                     console.log("Products Name updated")
-
-                                                    connection.end();
+                                                    afterConnection()
+                                                    //connection.end();
                                                 })
                                         })
                                 }
@@ -140,7 +149,7 @@ function afterConnection() {
                                     console.log(res)
                                     newName()
                                 })
-                                let newName = function newName() {
+                                let newName = function () {
                                     inquirer.prompt([
                                         {
                                             type: "input",
@@ -153,8 +162,8 @@ function afterConnection() {
                                                 function (err, res) {
                                                     if (err) throw err;
                                                     console.log("Department Name updated")
-
-                                                    connection.end();
+                                                    afterConnection()
+                                                    //connection.end();
                                                 })
                                         })
                                 }
@@ -162,16 +171,52 @@ function afterConnection() {
 
 
                         /* end update Department Name*/
-
-
-
-
-
-
                         break;
-                    default:
-                        console.log("djkjlajl")
+                    case "Update Price":
+                        inquirer.prompt([
+                            {
+                                type: "input",
+                                message: "Please input ID",
+                                name: "ID",
+                            },
+                        ])
+                            .then(function (id) {
+                                connection.query("SELECT Price FROM products WHERE ID = " + id.ID, function (err, res) {
+                                    if (err) throw err;
+                                    console.log(res)
+                                    newPrice()
+                                })
+                                let newPrice = function () {
+                                    inquirer.prompt([
+                                        {
+                                            type: "input",
+                                            message: "Please update price",
+                                            name: "price",
+                                        },
+                                    ])
+                                        .then(function (answer) {
+                                            connection.query("UPDATE products SET Price = '" + answer.price + "' WHERE ID =" + id.ID,
+                                                function (err, res) {
+                                                    if (err) throw err;
+                                                    console.log("Price updated")
+                                                    afterConnection()
+                                                })
+                                        })
+                                }
+                            })
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                        break;
+                    case "Exit":
+                        process.exit();
+                        console.log("Thanks! See you soon")
+                    //afterConnection();
                 }
+                                    connection.end();
                 //process.exit();
                 /*
                 if (update.add === 'Update Name of Product') {
