@@ -61,7 +61,6 @@ function afterConnection() {
 
             } else if (choice.managerChoice === addProduct) {
                 showAllProuduct();
-            
 
             } else {
                 choice.managerChoice === exit
@@ -159,7 +158,7 @@ function afterConnection() {
                                     ])
                                         .then(function (answer) {
                                             connection.query("UPDATE products SET Department_Name = '" + answer.name + "' WHERE ID =" + id.ID,
-                                                function (err, res) {
+                                                function (err) {
                                                     if (err) throw err;
                                                     console.log("Department Name updated")
                                                     afterConnection()
@@ -196,33 +195,17 @@ function afterConnection() {
                                     ])
                                         .then(function (answer) {
                                             connection.query("UPDATE products SET Price = '" + answer.price + "' WHERE ID =" + id.ID,
-                                                function (err, res) {
+                                                function (err) {
                                                     if (err) throw err;
                                                     console.log("Price updated")
                                                     afterConnection()
-                                                })
-                                        })
-                                }
-                            })
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
+                                                });
+                                        });
+                                };
+                            });
                         break;
-                    case "Exit":
-                        process.exit();
-                        console.log("Thanks! See you soon")
-                    //afterConnection();
-                }
-                                    connection.end();
-                //process.exit();
-                /*
-                if (update.add === 'Update Name of Product') {
-                    connection.query("SELECT ID, Name_of_Product FROM products", function (err, res) {
-                        if (err) throw err;
-                        console.log(res)
+                    case "Update Stock Quantity":
+                  
                         inquirer.prompt([
                             {
                                 type: "input",
@@ -231,39 +214,44 @@ function afterConnection() {
                             },
                         ])
                             .then(function (id) {
-                                connection.query("SELECT Name_of_Product FROM products WHERE ID = " + id.ID, function (err, res) {
+                                connection.query("SELECT Stock_Quantity FROM products WHERE ID = " + id.ID, function (err, res) {
                                     if (err) throw err;
                                     console.log(res)
-                                    newName()
-                                })
-                                let newName = function newName() {
+                                    newQuantity()
+                                });
+                                
+                                let newQuantity = function () {
                                     inquirer.prompt([
                                         {
                                             type: "input",
-                                            message: "Please input new name of product",
-                                            name: "name",
+                                            message: "Please update quantity",
+                                            name: "quantity",
                                         },
                                     ])
                                         .then(function (answer) {
-                                            connection.query("UPDATE products SET Name_of_Product = '" + answer.name + "' WHERE ID =" + id.ID,
-                                                function (err, res) {
+                                            connection.query("UPDATE products SET Stock_Quantity = '" + answer.quantity + "' WHERE ID =" + id.ID,
+                                                function (err) {
                                                     if (err) throw err;
-                                                    console.log("Products Name updated")
-
+                                                    console.log("Stock Quantity updated")
+                                                    console.log("---------------------------------------------------------------")
                                                     connection.end();
-                                                })
-                                        })
-                                }
-                            })
-                    })
-
-                }*/
-            })
-
-    }
-    /* end update product Name function */
-
-}
+                                                    afterConnection()
+                                                });
+                                        });
+                                };
+                            });
+                                
+                            break;
+                    case "Exit":
+                        process.exit();
+                        
+                };
+                    
+            });
+        
+        
+                }
+            }
 
 
 
