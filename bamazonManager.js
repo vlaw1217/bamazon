@@ -37,7 +37,7 @@ function afterConnection() {
         .then(function (choice) {
             let sale = 'View Products for Sale';
             let inventory = 'View Low Inventory';
-            let updateInventory = 'Update Inventory';
+            let updateInfo = 'Update Information';
             if (choice.managerChoice === sale) {
                 connection.query("SELECT * FROM products", function (err, res) {
                     if (err) throw err;
@@ -52,29 +52,27 @@ function afterConnection() {
                     console.log("---------------------------------------------------------")
                     afterConnection()
                 });
-                
-            } else if (choice.managerChoice === updateInventory) {
+
+            } else if (choice.managerChoice === updateInfo) {
                 showAllProuduct();
                 //updateProductFunc();
-               
+
             }
         })
-    
-/* start showAllProudct function */
-    function showAllProuduct() { 
+
+    /* start showAllProudct function */
+    function showAllProuduct() {
         connection.query("SELECT id, Name_of_Product, Department_Name, Price, Stock_Quantity FROM products", function (err, res) {
             if (err) throw err;
             console.log(res);
+            console.log("---------------------------------------------------------------")
             updateProductFunc();
         })
-
     }
-    
-/* end showAllProduct function */
-    
+    /* end showAllProduct function */
 
     /* start update product Name function */
-    function updateProductFunc() { 
+    function updateProductFunc() {
         inquirer.prompt([
             {
                 type: "list",
@@ -85,46 +83,45 @@ function afterConnection() {
         ])
             .then(function (update) {
                 console.log(update.add)
-                switch (update.add) { 
+                switch (update.add) {
                     case "Update Name of Product":
                         console.log("product");
-                    /*Start update Product Name */                         
-                            inquirer.prompt([
-                                {
-                                    type: "input",
-                                    message: "Please input ID",
-                                    name: "ID",
-                                },
-                            ])
-                                .then(function (id) {
+                        /*Start update Product Name */
+                        inquirer.prompt([
+                            {
+                                type: "input",
+                                message: "Please input ID",
+                                name: "ID",
+                            },
+                        ])
+                            .then(function (id) {
 
-                                    connection.query("SELECT Name_of_Product FROM products WHERE ID = " + id.ID, function (err, res) {
-                                        if (err) throw err;
-                                        console.log(res)
-                                        newName()
-                                    })
-                                    let newName = function newName() {
-                                        inquirer.prompt([
-                                            {
-                                                type: "input",
-                                                message: "Please update name of product",
-                                                name: "name",
-                                            },
-                                        ])
-                                            .then(function (answer) {
-                                                connection.query("UPDATE products SET Name_of_Product = '" + answer.name + "' WHERE ID =" + id.ID,
-                                                    function (err, res) {
-                                                        if (err) throw err;
-                                                        console.log("Products Name updated")
-
-                                                        connection.end();
-                                                    })
-                                            })
-                                    }
+                                connection.query("SELECT Name_of_Product FROM products WHERE ID = " + id.ID, function (err, res) {
+                                    if (err) throw err;
+                                    console.log(res)
+                                    newName()
                                 })
-                                           
-                                             
-                    /* end update Product Name*/
+                                let newName = function newName() {
+                                    inquirer.prompt([
+                                        {
+                                            type: "input",
+                                            message: "Please update name of product",
+                                            name: "name",
+                                        },
+                                    ])
+                                        .then(function (answer) {
+                                            connection.query("UPDATE products SET Name_of_Product = '" + answer.name + "' WHERE ID =" + id.ID,
+                                                function (err, res) {
+                                                    if (err) throw err;
+                                                    console.log("Products Name updated")
+
+                                                    connection.end();
+                                                })
+                                        })
+                                }
+                            })
+
+                        /* end update Product Name*/
                         break;
                     case "Update Department":
                         console.log("dept")
@@ -164,7 +161,7 @@ function afterConnection() {
                             })
 
 
-                    /* end update Department Name*/
+                        /* end update Department Name*/
 
 
 
@@ -220,11 +217,11 @@ function afterConnection() {
 
     }
     /* end update product Name function */
-    
-}
-                        
-                        
-                                                    
-       
 
-        
+}
+
+
+
+
+
+
