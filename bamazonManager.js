@@ -60,8 +60,42 @@ function afterConnection() {
                 //updateProductFunc();
 
             } else if (choice.managerChoice === addProduct) {
-                showAllProuduct();
-
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        message: "Please add Name of Product",
+                        name: "addName",
+                    },
+                    {
+                        type: "input",
+                        message: "Please add Department Name",
+                        name: "dept",
+                    },
+                    {
+                        type: "input",
+                        message: "Please add Price",
+                        name: "addPrice",
+                    },
+                    {
+                        type: "input",
+                        message: "Please add Stock Quantity",
+                        name: "addQuantity",
+                    }
+                ])
+                    .then(function (insertProduct) {
+                        connection.query("insert into products (Name_of_Product, Department_Name, Stock_Quantity,price) values ('" + insertProduct.addName + "','" + insertProduct.dept + "'," + insertProduct.addQuantity + "," + insertProduct.addPrice + ")", function (err) {
+                            if (err) throw err;
+                            console.log("New Product added")
+                        });
+                        connection.query("SELECT * FROM products", function (err, res) {
+                            if (err) throw err;
+                            console.log(res)
+                            console.log("------------------------------------------------------------")
+                            afterConnection();
+                        });
+                        //console.log("You have added product " + insertProduct.addName + ", department =" +insertProduct.dept);
+                    });
+                         
             } else {
                 choice.managerChoice === exit
                 process.exit();
@@ -205,7 +239,6 @@ function afterConnection() {
                             });
                         break;
                     case "Update Stock Quantity":
-                  
                         inquirer.prompt([
                             {
                                 type: "input",
@@ -219,7 +252,7 @@ function afterConnection() {
                                     console.log(res)
                                     newQuantity()
                                 });
-                                
+
                                 let newQuantity = function () {
                                     inquirer.prompt([
                                         {
@@ -240,18 +273,17 @@ function afterConnection() {
                                         });
                                 };
                             });
-                                
-                            break;
+
+                        break;
                     case "Exit":
                         process.exit();
-                        
+
                 };
-                    
+
             });
-        
-        
-                }
-            }
+
+    }
+}
 
 
 
