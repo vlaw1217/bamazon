@@ -83,7 +83,7 @@ function afterConnection() {
                     }
                 ])
                     .then(function (insertProduct) {
-                        connection.query("Insert into products (Name_of_Product, Department_Name, Stock_Quantity,price) values ('" + insertProduct.addName + "','" + insertProduct.dept + "'," + insertProduct.addQuantity + "," + insertProduct.addPrice + ")", function (err) {
+                        connection.query("insert into products (Name_of_Product, Department_Name, Stock_Quantity,price) values ('" + insertProduct.addName + "','" + insertProduct.dept + "'," + insertProduct.addQuantity + "," + insertProduct.addPrice + ")", function (err) {
                             if (err) throw err;
                             console.log("New Product added")
                         });
@@ -95,7 +95,7 @@ function afterConnection() {
                         });
                         //console.log("You have added product " + insertProduct.addName + ", department =" +insertProduct.dept);
                     });
-
+                         
             } else {
                 choice.managerChoice === exit
                 process.exit();
