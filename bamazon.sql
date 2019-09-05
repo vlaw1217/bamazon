@@ -56,12 +56,38 @@ VALUE ('Makeup Remover', 'Mississauga', 36, 121);
 -- Create departments table --
 CREATE TABLE departments (
 
--- Unique id for each product --
+-- Unique id for each department --
 ID INTEGER auto_increment NOT NULL,
-Department_id VARCHAR(100) NOT NULL,
 Department_Name VARCHAR(100) NOT NULL,
 Over_Head_Costs DECIMAL (10,2),
 PRIMARY KEY (id)
 
 );
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Mississauga', 15);
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Richmond Hill', 28);
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Milton', 18);
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Oakville', 18);
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Brampton', 20);
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Guelph', 22);
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Hamilton', 20);
+
+INSERT INTO departments (Department_Name, Over_Head_Costs)
+VALUE ('Burlington', 20);
+
+
+
 

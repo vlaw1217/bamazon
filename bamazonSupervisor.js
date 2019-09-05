@@ -23,61 +23,228 @@ connection.connect(function (err) {
     console.log("Connected as id " + connection.threadID + "\n");
     afterConnection();
 });
+
 function afterConnection() {
-    //console.log("View Products Sales")
+    //Ask for veiw all or Department or Exit//
     inquirer.prompt([
         {
             type: "list",
-            message: "View all or specific department?",
-            name: "allName",
-            choices: ['All', 'Department Name', 'Exit'],
+            message: "Please choose one",
+            name: "choose",
+            choices: ['View Product Sales', 'Create New Department', 'Exit'],
         },
     ])
+
         .then(function (answer) {
-            if (answer.allName === "All") {
-                connection.query("SELECT ID, Department_Name, Product_Sales FROM products", function (err, res) {
-                    if (err) throw err;
-                    console.log(res);
-                    afterConnection();
-                })
-            } else if (answer.allName === "Department Name") {
-                inquirer.prompt([
-                    {
-                        type: "input",
-                        message: "Please enter department name.",
-                        name: "deptName",
+            switch (answer.choose) {
+                case "View Product Sales":
+                    viewSale();
+                    break;
+                case "Create New Department":
+                    createDept();
+                    break;
+                case "Exit":
+                    exitAll()
+                    break;
+
+                    function viewSale() {
+                        //if (answer.choose === "View Product Sales") {
+                        inquirer.prompt([
+                            {
+                                type: "list",
+                                message: "All or Specific Department?",
+                                name: "allName",
+                                choices: ['All Department', 'Input Department Name', 'Exit'],
+                            },
+                        ])
+
+                            //if choose all, will view all deparemnt and product sales//
+                            .then(function (ans) {
+                                switch (ans.allName) {
+                                    case "All Department":
+                                        allDept();
+                                        break;
+
+                                    case "Input Department Name":
+                                        inputDept()
+                                        break;
+
+                                    case "Exit":
+                                        exitAll()
+                                        break;
+                                        function allDept() {
+                                            //if (ans.allName === "All Department") {
+                                                connection.query("SELECT ID, Department_Name, Product_Sales FROM products", function (err, res) {
+                                                    if (err) throw err;
+                                                    console.log(res);
+                                                    afterConnection();
+                                                })
+                                            }
+
+                                        //}
+
+                                        function inputDept() {
+                                           // if (answer.allName === "Input Department Name") {
+                                                inquirer.prompt([
+                                                    {
+                                                        type: "input",
+                                                        message: "Please enter department name",
+                                                        name: "deptName",
+                                                    }
+                                                ])
+                                                    .then(function (answer) {
+                                                        connection.query("SELECT ID, Department_Name, Product_Sales FROM products where Department_Name = '" + answer.deptName + "' ", function (err, res) {
+                                                            if (err) throw err;
+                                                            console.log(res);
+                                                            afterConnection();
+                                                        
+                                                        });
+                                                    });
+                                            }
+                                        //}
+                                }
+                            })
                     }
-                ])
-                    .then(function (answer) {
-                        connection.query("SELECT ID, Department_Name, Product_Sales FROM products where Department_Name = '" + answer.deptName + "' ", function (err, res) {
-                           
-                            if (err) throw err;
-                            console.log(res);
-                            afterConnection();
-                        })
-                    });
-                
-            } else {
-                answer.allName === "Exit"
-                process.exit();
+                    
+                    function createDept() {
+                        //if (answer.choose === "Creat New Department") {
+                            //console.log("dept")
+                            /*Start update Department Name */
+                            inquirer.prompt([
+                                {
+                                    type: "input",
+                                    message: "Please input ID",
+                                    name: "ID",
+                                },
+                            ])
+
+                                .then(function (id) {
+                                    connection.query("SELECT Department_Name FROM products WHERE ID = " + id.ID, function (err, res) {
+                                        if (err) throw err;
+                                        console.log(res)
+                                        newName()
+                                    })
+                                    let newName = function () {
+                                        inquirer.prompt([
+                                            {
+                                                type: "input",
+                                                message: "Please update department name",
+                                                name: "name",
+                                            },
+                                        ])
+                                            .then(function (answer) {
+                                                connection.query("UPDATE products SET Department_Name = '" + answer.name + "' WHERE ID =" + id.ID,
+                                                    function (err) {
+                                                        if (err) throw err;
+                                                        console.log("Department Name updated")
+                                                        afterConnection()
+                                                        //connection.end();
+                                                    });
+                                            });
+                                    }
+                                });
+                        //}
+                    
+                    };
+                    function exitAll() {
+                        if (answer.allName === "Exit"); {
+                            process.exit();
+                        }
+                    }
+
+
             }
         })
-} 
-         
-
-
+    }
     
-        /*.then(function (answer) {
-            connection.query("SELECT * FROM products", function (err, res) {
-                if (err) throw err;
-                if (answer.deptName === res[0].Department_Name) {
 
+                    /*function allDept() {
+                        if (ans.allName === "All Department") {
+                            connection.query("SELECT ID, Department_Name, Product_Sales FROM products", function (err, res) {
+                                if (err) throw err;
+                                console.log(res);
+                                afterConnection();
+                            })
+                        }
+
+                    }*/
+
+                    //if choose department name, user needs to enter the deparment name and show specific department with product sales//
+                    /*function inputDept() {
+                        if (answer.allName === "Input Department Name") {
+                            inquirer.prompt([
+                                {
+                                    type: "input",
+                                    message: "Please enter department name",
+                                    name: "deptName",
+                                }
+                            ])
+                                .then(function (answer) {
+                                    connection.query("SELECT ID, Department_Name, Product_Sales FROM products where Department_Name = '" + answer.deptName + "' ", function (err, res) {
+                                        if (err) throw err;
+                                        console.log(res);
+                                        afterConnection();
+                                    });
+                                });
+                        }*/
+
+                    /*} else (answer.allName === "Exit"); {
+                        afterConnection();
+                    };
+            }*/
+
+            /*function createDept() {
+                if (answer.choose === "Creat New Department") {
+                    //console.log("dept")
+                    Start update Department Name 
+                    inquirer.prompt([
+                        {
+                            type: "input",
+                            message: "Please input ID",
+                            name: "ID",
+                        },
+                    ])
+
+                        .then(function (id) {
+                            connection.query("SELECT Department_Name FROM products WHERE ID = " + id.ID, function (err, res) {
+                                if (err) throw err;
+                                console.log(res)
+                                newName()
+                            })
+                            let newName = function () {
+                                inquirer.prompt([
+                                    {
+                                        type: "input",
+                                        message: "Please update department name",
+                                        name: "name",
+                                    },
+                                ])
+                                    .then(function (answer) {
+                                        connection.query("UPDATE products SET Department_Name = '" + answer.name + "' WHERE ID =" + id.ID,
+                                            function (err) {
+                                                if (err) throw err;
+                                                console.log("Department Name updated")
+                                                afterConnection()
+                                                //connection.end();
+                                            });
+                                    });
+                            }
+                        });
                 }
+};*/
+            /*function exitAll() {
+                if (answer.allName === "Exit"); {
+                    process.exit();
+                }
+            }
 
-            })
+        }
 
-            connection.query("SELECT ID, Department_Name, Product_Sales FROM products", function (err, res) {
-                if (err) throw err;
-                console.log(res);
-            });
-        };*/
+            }*/
+
+
+
+
+
+
+        
