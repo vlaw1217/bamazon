@@ -66,7 +66,7 @@ function afterConnection() {
                             /* before update the quantity, display the details before confirmation for update */
                             connection.query("SELECT ID, Name_of_Product, Price FROM products where ID =" + inquirerRes.ID, function (err, res) {
                                 if (err) throw err;
-                                //let unit = inquirerRes.number 
+                            //Price multiplied by the quantity then store in product sale column//
                                 let price = res[0].Price * unit
                                 connection.query("UPDATE products SET Product_Sales = '" + price + "' WHERE ID =" + inquirerRes.ID, function (err, res) {
                                     if (err) throw err;
