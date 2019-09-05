@@ -141,6 +141,7 @@ function afterConnection() {
                                 connection.query("SELECT Name_of_Product FROM products WHERE ID = " + id.ID, function (err, res) {
                                     if (err) throw err;
                                     console.log(res)
+
                                     newName()
                                 })
                                 let newName = function () {
@@ -156,8 +157,7 @@ function afterConnection() {
                                                 function (err, res) {
                                                     if (err) throw err;
                                                     console.log("Products Name updated")
-                                                    afterConnection()
-                                                    //connection.end();
+                                                    afterConnection()                                      
                                                 })
                                         })
                                 }
