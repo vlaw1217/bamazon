@@ -16,6 +16,7 @@ Name_of_Product VARCHAR(100) NOT NULL,
 Department_Name VARCHAR(100) NOT NULL,
 Price DECIMAL (10,2),
 Stock_Quantity INTEGER,
+Product_Sales DECIMAL (10,2),
 PRIMARY KEY (id)
 
 );
@@ -51,4 +52,16 @@ VALUE ('Eyelash Curlers', 'Oakville', 20, 50);
 INSERT INTO products (Name_of_Product, Department_Name, Price, Stock_Quantity)
 VALUE ('Makeup Remover', 'Mississauga', 36, 121);
 
+
+-- Create departments table --
+CREATE TABLE departments (
+
+-- Unique id for each product --
+ID INTEGER auto_increment NOT NULL,
+Department_id VARCHAR(100) NOT NULL,
+Department_Name VARCHAR(100) NOT NULL,
+Over_Head_Costs DECIMAL (10,2),
+PRIMARY KEY (id)
+
+);
 

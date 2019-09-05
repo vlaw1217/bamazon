@@ -57,7 +57,7 @@ function afterConnection() {
                         console.log("------------------------------------------------------")
                         //When user input quantity over the stock quanitity//
                         let data = res[0].Stock_Quantity;
-                        let unit = inquirerRes.number 
+                        let unit = inquirerRes.number
                         if (unit > data) {
                             console.log("Sorry! This item is out of stock!")
                             /*If suffcicent stock is valid, ask user to confirm*/
@@ -68,75 +68,83 @@ function afterConnection() {
                                 if (err) throw err;
                                 //let unit = inquirerRes.number 
                                 let price = res[0].Price * unit
-                                //console.log(price)
-                                console.log(res);
-                                console.log("Total unit to buy: " + unit)
-                                console.log("Total Price: " + price)
-                                console.log("-----------------------------------------------------")
-                            /* finish display */
-
-                            /* begin input prompt to confirm update the record */
-                            inquirer.prompt([
-                                {
-                                    type: "list",
-                                    message: "Please confirm your purchase.",
-                                    name: "confirm",
-                                    choices: ['Yes', 'No'],
-                                },
-                            ])
-                                .then(function (answer) {
-                                    console.log('Answer:', answer.confirm);
-                                    console.log("***Thank you for purchasing, see you next time!***")
+                                connection.query("UPDATE products SET Product_Sales = '" + price + "' WHERE ID =" + inquirerRes.ID, function (err, res) {
+                                    if (err) throw err;
+                                 
+                                    console.log("Total buying unit: " + unit)
+                                    console.log("Total Price: " + price)
                                     console.log("-----------------------------------------------------")
+
+                                    /* finish display */
+
+                                    /* begin input prompt to confirm update the record */
+                                    inquirer.prompt([
+                                        {
+                                            type: "list",
+                                            message: "Please confirm your purchase.",
+                                            name: "confirm",
+                                            choices: ['Yes', 'No'],
+                                        },
+                                    ])
+                                        .then(function (answer) {
+                                            console.log('Answer:', answer.confirm);
+                                            console.log("***Thank you for purchasing, see you next time!***")
+                                            console.log("-----------------------------------------------------")
                                    
-                                        if (answer.confirm === "Yes") {
+                                            if (answer.confirm === "Yes") {
                                           
                                                 //update quantity if user confirm//
                                                 let stockQuantity = data - inquirerRes.number
                                                 //set the update query//
                                                 let updateQuantity = "UPDATE products SET Stock_Quantity = " + stockQuantity + " WHERE ID = " + inquirerRes.ID;
                                                 console.log(updateQuantity)
+                                              
                                                 //start update product//
                                                 connection.query(updateQuantity,
                                                     function (err) {
                                                         if (err) throw err;
                                                         console.log("Product updated");
+                                                        console.log("Product Sales Updated");
                                                     }
                                                 
                                                 );
                                            
-                                        connection.end();
-                                        //end update product//
-                                    } else {
-                                        //console.log("no")
-                                        inquirer.prompt([
-                                            {
-                                                type: "list",
-                                                message: "Do you want to exit or continue?",
-                                                name: "confirm",
-                                                choices: ['Exit', 'Continue'],
-                                            },
-                                        ])
-                                            .then(function (response) {
-                                                if (response.confirm === "Continue") {
-                                                    console.log('Response', "response.continue")
-                                                    afterConnection();
-                                                } else {
-                                                    console.log("Exit")
-                                                    process.exit();
-                                                }
-                                            })
+                                                connection.end();
+                                                //end update product//
+                                            } else {
+                                                //console.log("no")
+                                                inquirer.prompt([
+                                                    {
+                                                        type: "list",
+                                                        message: "Do you want to exit or continue?",
+                                                        name: "confirm",
+                                                        choices: ['Exit', 'Continue'],
+                                                    },
+                                                ])
+                                                    .then(function (response) {
+                                                        if (response.confirm === "Continue") {
+                                                            console.log('Response', "response.continue")
+                                                            afterConnection();
+                                                        } else {
+                                                            console.log("Exit")
+                                                            process.exit();
+                                                        }
+                                                    })
                                         
-                                    }
+                                            }
+                                    
+                                        });
                                 });
-                        });
                                 
-                                }
+                            });
                         
-                        //connection.end();
+                            //connection.end();
+                        }
+                    
+                        console.log("------------------------------------------------------");
                     })
-                    console.log("------------------------------------------------------");
                 }
+                        
             
                 else if (inquirerRes.ID > 10) {
                     console.log("Sorry! No this product ID number!")
