@@ -30,7 +30,7 @@ function afterConnection() {
             type: "list",
             message: "Please choose one.",
             name: "managerChoice",
-            choices: ['View Products for Sale', 'View Low Inventory', 'Update Information', 'Add New Product', 'Exit']
+            choices: ['View Products for Sale', 'Total Profit','View Low Inventory', 'Update Information', 'Add New Product', 'Exit']
         },
     ])
 
@@ -47,6 +47,12 @@ function afterConnection() {
                     console.log("---------------------------------------------------------")
                     afterConnection()
                 });
+
+            } else if (choice.managerChoice === "Total Profit") {
+                totalProfit();
+                afterConnection()
+
+            
             } else if (choice.managerChoice === inventory) {
                 connection.query("SELECT ID, Name_of_Product, Department_Name, Stock_Quantity FROM products where Stock_Quantity < 5", function (err, res) {
                     if (err) throw err
@@ -112,6 +118,15 @@ function afterConnection() {
             updateProductFunc();
         })
     }
+function totalProfit() {
+    connection.query("SELECT products.Name_of_Product, departments.Department_Name, products.Product_Sales  -  departments.Over_Head_Costs As `Total Profit` FROM products, departments WHERE products.Department_Name=departments.Department_Name", function (err, res) {
+        if (err) throw err;
+        console.table(res)
+        console.log("----------------------------------------------------------------------------------")
+        afterConnection();
+
+    })
+}
     /* end showAllProduct function */
 
     /* start update product Name function */
