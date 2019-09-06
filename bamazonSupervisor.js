@@ -31,7 +31,7 @@ function afterConnection() {
             type: "list",
             message: "Please choose one",
             name: "choose",
-            choices: ['View Product Sales', 'Create New Department', 'Delete Department', 'Exit'],
+            choices: ['View Product Sales', 'Total Profit','Create New Department', 'Delete Department', 'Exit'],
         },
     ])
 
@@ -40,6 +40,9 @@ function afterConnection() {
                 case "View Product Sales":
                     viewSale();
                     break;
+                case "Total Profit":
+                    totalProfit();
+                    break;
                 case "Create New Department":
                     createDept();
                     break;
@@ -47,39 +50,43 @@ function afterConnection() {
                     deleteDept();
                     break;
                 case "Exit":
-                    exitAll()
+                    exitAll();
                     break;
 
                     function viewSale() {
-                        //if (answer.choose === "View Product Sales") {
                         inquirer.prompt([
                             {
                                 type: "list",
                                 message: "All or Specific Department?",
                                 name: "allName",
-                                choices: ['All Department', 'Input Department Name', 'Exit'],
+                                choices: ['All Departments', 'Input Department Name', 'Exit'],
                             },
                         ])
                             //if choose all, will view all deparemnt and product sales//
                             .then(function (ans) {
                                 switch (ans.allName) {
-                                    case "All Department":
+                                    case "All Departments":
                                         allDept();
                                         break;
                                     case "Input Department Name":
-                                        inputDept()
+                                        inputDept();
                                         break;
                                     case "Exit":
-                                        exitAll()
+                                        exitAll();
                                         break;
 
 
                                         function allDept() {
-                                            connection.query("SELECT * FROM departments", function (err, res) {
+
+                                            connection.query("SELECT products.Name_of_Product, products.Price, products.Product_Sales, departments.Department_Name, departments.Over_Head_Costs FROM products INNER JOIN departments ON products.Department_Name=departments.Department_Name", function (err, res) {
                                                 if (err) throw err;
+                                                //console.log(viewAllDept)
                                                 console.log(res);
+                                                console.log("----------------------------------------------------------------------------------")
                                                 afterConnection();
+
                                             })
+
                                         }
 
                                         function inputDept() {
@@ -102,7 +109,17 @@ function afterConnection() {
                                 }
                             })
                     }
-
+                    function totalProfit() {
+                        connection.query("SELECT products.Name_of_Product, departments.Department_Name, products.Product_Sales  -  departments.Over_Head_Costs As Profit FROM products, departments WHERE products.Department_Name=departments.Department_Name", function (err, res) {
+                            if (err) throw err;
+                            console.log(res)
+                            console.log("----------------------------------------------------------------------------------")
+                            afterConnection();
+                            
+                            })
+                    }
+                        
+                        
                     function createDept() {
                         inquirer.prompt([
                             {
@@ -120,9 +137,11 @@ function afterConnection() {
                             .then(function (create) {
                                 connection.query("Insert into departments (Department_Name, Over_Head_Costs) values ('" + create.newName + "'," + create.number + ")", function (err, res) {
                                     if (err) throw err;
+                                    console.log("----------------------------------------------------------------------------------")
                                     console.log("Updated New Department")
+                                    console.log("----------------------------------------------------------------------------------")
                                     afterConnection();
-                                    
+
                                 })
                             })
                     }
@@ -131,10 +150,8 @@ function afterConnection() {
                         connection.query("SELECT * FROM departments", function (err, res) {
                             if (err) throw err;
                             console.log(res);
-                            //console.log("Delete Department")
-                            //afterConnection();
-                            //})
-                        
+                            console.log("----------------------------------------------------------------------------------")
+
                             inquirer.prompt([
                                 {
                                     type: "input",
@@ -143,25 +160,36 @@ function afterConnection() {
                                 },
                             ])
                                 .then(function (deleteDept) {
+
                                     // Delete department//
                                     connection.query("Delete from departments where ID = " + deleteDept.ID, function (err, res) {
                                         if (err) throw err;
+                                        console.log("----------------------------------------------------------------------------------")
                                         console.log("Department deleted")
+                                        console.log("----------------------------------------------------------------------------------")
                                         afterConnection();
                                     });
                                 });
                         });
                     };
             };
-            function exitAll() {
-                if (answer.allName === "Exit"); {
-                    process.exit();
-                };
-            };
-
-        });
-};
         
+            function exitAll() {
+                        if (answer.allName === "Exit"); {
+                            process.exit();
+                        };
+                       
+                    };
+
+            });
+};
+
+
+
+
+
+
+
 
 
 
