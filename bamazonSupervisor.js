@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const mysql = require("mysql");
 
-let inquirer = require("inquirer");
+const inquirer = require("inquirer");
 
 const connection =
     exports.connection = mysql.createConnection({
@@ -81,7 +81,7 @@ function afterConnection() {
                                             connection.query("SELECT products.Name_of_Product, products.Price, products.Product_Sales, departments.Department_Name, departments.Over_Head_Costs FROM products INNER JOIN departments ON products.Department_Name=departments.Department_Name", function (err, res) {
                                                 if (err) throw err;
                                                 //console.log(viewAllDept)
-                                                console.log(res);
+                                                console.table(res);
                                                 console.log("----------------------------------------------------------------------------------")
                                                 afterConnection();
 
@@ -100,7 +100,7 @@ function afterConnection() {
                                                 .then(function (answer) {
                                                     connection.query("SELECT ID, Department_Name, Product_Sales FROM products where Department_Name = '" + answer.deptName + "' ", function (err, res) {
                                                         if (err) throw err;
-                                                        console.log(res);
+                                                        console.table(res);
                                                         afterConnection();
 
                                                     });
@@ -110,15 +110,14 @@ function afterConnection() {
                             })
                     }
                     function totalProfit() {
-                        connection.query("SELECT products.Name_of_Product, departments.Department_Name, products.Product_Sales  -  departments.Over_Head_Costs As Profit FROM products, departments WHERE products.Department_Name=departments.Department_Name", function (err, res) {
+                        connection.query("SELECT products.Name_of_Product, departments.Department_Name, products.Product_Sales  -  departments.Over_Head_Costs As `Total Profit` FROM products, departments WHERE products.Department_Name=departments.Department_Name", function (err, res) {
                             if (err) throw err;
-                            console.log(res)
+                            console.table(res)
                             console.log("----------------------------------------------------------------------------------")
                             afterConnection();
                             
                             })
                     }
-                        
                         
                     function createDept() {
                         inquirer.prompt([
@@ -149,7 +148,7 @@ function afterConnection() {
                         //Show all Departments before delete department//
                         connection.query("SELECT * FROM departments", function (err, res) {
                             if (err) throw err;
-                            console.log(res);
+                            console.table(res);
                             console.log("----------------------------------------------------------------------------------")
 
                             inquirer.prompt([
@@ -175,7 +174,8 @@ function afterConnection() {
             };
         
             function exitAll() {
-                        if (answer.allName === "Exit"); {
+                if (answer.allName === "Exit"); {
+                    connection.end();
                             process.exit();
                         };
                        

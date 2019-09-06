@@ -43,14 +43,15 @@ function afterConnection() {
             if (choice.managerChoice === sale) {
                 connection.query("SELECT * FROM products", function (err, res) {
                     if (err) throw err;
-                    console.log(res);
+                    console.table(res);
                     console.log("---------------------------------------------------------")
                     afterConnection()
                 });
             } else if (choice.managerChoice === inventory) {
                 connection.query("SELECT ID, Name_of_Product, Department_Name, Stock_Quantity FROM products where Stock_Quantity < 5", function (err, res) {
-                    if (err) throw err;
-                    console.log(res);
+                    if (err) throw err
+                        console.table(res)
+                             
                     console.log("---------------------------------------------------------")
                     afterConnection()
                 });
@@ -89,7 +90,7 @@ function afterConnection() {
                         });
                         connection.query("SELECT * FROM products", function (err, res) {
                             if (err) throw err;
-                            console.log(res)
+                            console.table(res)
                             console.log("------------------------------------------------------------")
                             afterConnection();
                         });
@@ -106,7 +107,7 @@ function afterConnection() {
     function showAllProuduct() {
         connection.query("SELECT id, Name_of_Product, Department_Name, Price, Stock_Quantity FROM products", function (err, res) {
             if (err) throw err;
-            console.log(res);
+            console.table(res);
             console.log("---------------------------------------------------------------")
             updateProductFunc();
         })
@@ -124,10 +125,10 @@ function afterConnection() {
             },
         ])
             .then(function (update) {
-                console.log(update.add)
+                //console.table(update.add)
                 switch (update.add) {
                     case "Update Name of Product":
-                        console.log("product");
+                        //console.log("product");
                         /*Start update Product Name */
                         inquirer.prompt([
                             {
@@ -140,7 +141,7 @@ function afterConnection() {
 
                                 connection.query("SELECT Name_of_Product FROM products WHERE ID = " + id.ID, function (err, res) {
                                     if (err) throw err;
-                                    console.log(res)
+                                    console.table(res)
 
                                     newName()
                                 })
@@ -157,6 +158,7 @@ function afterConnection() {
                                                 function (err, res) {
                                                     if (err) throw err;
                                                     console.log("Products Name updated")
+                                                    console.log("---------------------------------------------------------------")
                                                     afterConnection()                                      
                                                 })
                                         })
@@ -166,7 +168,7 @@ function afterConnection() {
                         /* end update Product Name*/
                         break;
                     case "Update Department":
-                        console.log("dept")
+                        //console.log("dept")
                         /*Start update Department Name */
                         inquirer.prompt([
                             {
@@ -179,7 +181,7 @@ function afterConnection() {
 
                                 connection.query("SELECT Department_Name FROM products WHERE ID = " + id.ID, function (err, res) {
                                     if (err) throw err;
-                                    console.log(res)
+                                    console.table(res)
                                     newName()
                                 })
                                 let newName = function () {
@@ -195,6 +197,7 @@ function afterConnection() {
                                                 function (err) {
                                                     if (err) throw err;
                                                     console.log("Department Name updated")
+                                                    console.log("---------------------------------------------------------------")
                                                     afterConnection()
                                                     //connection.end();
                                                 })
@@ -216,7 +219,7 @@ function afterConnection() {
                             .then(function (id) {
                                 connection.query("SELECT Price FROM products WHERE ID = " + id.ID, function (err, res) {
                                     if (err) throw err;
-                                    console.log(res)
+                                    console.table(res)
                                     newPrice()
                                 })
                                 let newPrice = function () {
@@ -232,6 +235,7 @@ function afterConnection() {
                                                 function (err) {
                                                     if (err) throw err;
                                                     console.log("Price updated")
+                                                    console.log("---------------------------------------------------------------")
                                                     afterConnection()
                                                 });
                                         });
@@ -249,7 +253,7 @@ function afterConnection() {
                             .then(function (id) {
                                 connection.query("SELECT Stock_Quantity FROM products WHERE ID = " + id.ID, function (err, res) {
                                     if (err) throw err;
-                                    console.log(res)
+                                    console.table(res)
                                     newQuantity()
                                 });
 

@@ -26,9 +26,9 @@ connection.connect(function (err) {
 });
 // Show all products//
 function afterConnection() {
-    connection.query("SELECT * FROM products", function (err, res) {
+    connection.query("SELECT ID, Name_of_Product, Department_Name, Price, Stock_Quantity FROM products", function (err, res) {
         if (err) throw err;
-        console.log(res);
+        console.table(res);
         console.log("------------------------------------------------------")
         userQuestion();
     });
@@ -49,11 +49,11 @@ function afterConnection() {
         ])
             
             .then(function (inquirerRes) {
-                if (inquirerRes.ID <= 10) {
+                if (inquirerRes.ID <= 100) {
                     //Show the item after user input id//
                     connection.query("SELECT * FROM products where ID = " + inquirerRes.ID, function (err, res) {
                         if (err) throw err;
-                        console.log(res);
+                        console.table(res);
                         console.log("------------------------------------------------------")
                         //When user input quantity over the stock quanitity//
                         let data = res[0].Stock_Quantity;
@@ -138,7 +138,6 @@ function afterConnection() {
                                 
                             });
                         
-                            //connection.end();
                         }
                     
                         console.log("------------------------------------------------------");
@@ -146,7 +145,7 @@ function afterConnection() {
                 }
                         
             
-                else if (inquirerRes.ID > 10) {
+                else if (inquirerRes.ID === null) {
                     console.log("Sorry! No this product ID number!")
                     userQuestion();
                 }
@@ -155,7 +154,6 @@ function afterConnection() {
                     userQuestion();
                 }
             });
-    
     
     };
 
